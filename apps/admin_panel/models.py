@@ -49,3 +49,15 @@ class Result(models.Model):
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.question) + ' ' + str(self.correct_answer)
+
+
+class Specialization(models.Model):
+    title = models.CharField(max_length=100)
+    courses = models.ManyToManyField(Course)
+
+    def __str__(self):
+        return self.title
+
+
+class StaticGraph(models.Model):
+    image = models.FilePathField(path='/static/')

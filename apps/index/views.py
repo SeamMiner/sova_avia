@@ -12,10 +12,10 @@ def index(request, incorrect_data=0):
 
 def register(request, unfortunately=None):
     if unfortunately is None:
-        return render(request, 'index/register.html')
+        return render(request, 'index/register.html', {'list_companies': Admin.objects.all()})
     if unfortunately:
-        return render(request, 'index/incorrect_reg.html')
-    return render(request, 'index/incorrect_password.html')
+        return render(request, 'index/incorrect_reg.html', {'list_companies': Admin.objects.all()})
+    return render(request, 'index/incorrect_password.html', {'list_companies': Admin.objects.all()})
 
 
 def auth(request):
@@ -34,19 +34,37 @@ def auth(request):
             return HttpResponseRedirect(reverse('index:index', args=(1, )))
 
 
-def new(request):
+def new(request, superuser):
     try:
-        current_password = request.POST['password0']
-        if current_password == request.POST['password1']:
-            current_login = request.POST['login']
-            for admin in Admin.objects.all():
-                if admin.login == current_login:
-                    break
+        if superuser:
+            current_password = request.POST['password0']
+            if current_password == request.POST['password1']:
+                current_login = request.POST['login']
+                for admin in Admin.objects.all():
+                    if admin.login == current_login:
+                        break
+                else:
+                    Admin.objects.create(login=current_login, password=current_password,
+                                         title_company=request.POST['title'])
+                    return HttpResponseRedirect(reverse('admin_panel:index', args=(current_login,)))
+                return HttpResponseRedirect(reverse('index:register', args=(1,)))
             else:
-                Admin.objects.create(login=current_login, password=current_password)
-                return HttpResponseRedirect(reverse('admin_panel:index'))  # Следует переписать путь до админ панели
-            return HttpResponseRedirect(reverse('index:register', args=(1,)))
+                return HttpResponseRedirect(reverse('index:register', args=(0,)))
         else:
-            return HttpResponseRedirect(reverse('index:register', args=(0,)))
+            current_password = request.POST['password0u']
+            if current_password == request.POST['password1u']:
+                current_login = request.POST['loginu']
+                for user in User.objects.all():
+                    if user.login == current_login:
+                        break
+                else:
+                    User.objects.create(login=current_login, password=current_password, fio=request.POST['fio'],
+                                        email=request.POST['email'], phone=request.POST['phone'],
+                                        experience=request.POST['points'], admin=Admin.objects.get(id=
+                                        request.POST['title_company']))
+                    return HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы с курсами
+                return HttpResponseRedirect(reverse('index:register', args=(1,)))
+            else:
+                return HttpResponseRedirect(reverse('index:register', args=(0,)))
     except:
         raise Http404
