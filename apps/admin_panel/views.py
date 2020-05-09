@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from apps.index.models import Admin
-from apps.admin_panel.models import Course, Topic
+from apps.admin_panel.models import Course, Topic, StaticGraph
 
 
 def index(request, admin_login=None):
@@ -16,7 +16,8 @@ def index(request, admin_login=None):
 def course(request, admin_login, course_id):
     topics_list = Topic.objects.filter(course=(Course.objects.get(id=course_id)))
     return render(request, 'admin_panel/course_inner.html', {'course_id': course_id, 'admin_login': admin_login,
-                                                             'topics_list': topics_list})
+                                                             'topics_list': topics_list,
+                                                             'ex_image': StaticGraph.objects.all()[0]})
 
 
 def topic_edit(request, admin_login, course_id, topic_id):

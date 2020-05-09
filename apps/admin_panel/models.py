@@ -60,4 +60,4 @@ class Specialization(models.Model):
 
 
 class StaticGraph(models.Model):
-    image = models.FilePathField(path='/static/')
+    image = models.ImageField(verbose_name='image', upload_to='static/', null=True, blank=True)
