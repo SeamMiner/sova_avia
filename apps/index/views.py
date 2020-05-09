@@ -29,7 +29,7 @@ def auth(request):
         try:
             admin_instance = Admin.objects.get(login=request.POST['login'])
             if admin_instance.password == request.POST['password']:
-                return HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы админ панели
+                return HttpResponseRedirect(reverse('admin_panel:index', args=(admin_instance.login, )))
         except:
             return HttpResponseRedirect(reverse('index:index', args=(1, )))
 
@@ -44,7 +44,7 @@ def new(request):
                     break
             else:
                 Admin.objects.create(login=current_login, password=current_password)
-                return HttpResponseRedirect(reverse('index:index'))  # Следует переписать путь до админ панели
+                return HttpResponseRedirect(reverse('admin_panel:index'))  # Следует переписать путь до админ панели
             return HttpResponseRedirect(reverse('index:register', args=(1,)))
         else:
             return HttpResponseRedirect(reverse('index:register', args=(0,)))
