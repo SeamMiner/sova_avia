@@ -17,14 +17,14 @@ def register(request):
 def auth(request):
     try:
         user_instance = User.objects.get(login=request.POST['login'])
-        if user_instance.password == request.POST['login']:
-            return HttpResponseRedirect(reverse('index/register.html'))  # Следует переписать путь до страницы с курсами
+        if user_instance.password.strip("'") == request.POST['password']:
+            return HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы с курсами
         else:
-            return render(request, 'index/incorrect.html')
+            return render(request, 'index/incorrect.html', {'login': request.POST['login']})
     except:
         try:
             admin_instance = Admin.objects.get(login=request.POST['login'])
-            if admin_instance.password == request.POST['login']:
-                HttpResponseRedirect(reverse('index/register.html'))  # Следует переписать путь до страницы админ панели
+            if admin_instance.password == request.POST['password']:
+                HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы админ панели
         except:
-            return render(request, 'index/incorrect.html')
+            return render(request, 'index/incorrect.html', {'login': request.POST['login']})
