@@ -64,7 +64,7 @@ def new(request, superuser):
                                         email=request.POST['email'], phone=request.POST['phone'],
                                         experience=request.POST['points'], admin=Admin.objects.get(id=
                                         request.POST['title_company']))
-                    return HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы с курсами
+                    return HttpResponseRedirect(reverse('lk:index', args=(current_login, )))
                 return HttpResponseRedirect(reverse('index:register', args=(1,)))
             else:
                 return HttpResponseRedirect(reverse('index:register', args=(0,)))
