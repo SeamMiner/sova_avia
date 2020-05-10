@@ -22,7 +22,7 @@ def course(request, admin_login, course_id):
 
 
 def topic_edit(request, admin_login, course_id, topic_id):
-    raise Http404
+    return render(request, 'admin_panel/topic_edit.html')
 
 
 def add_course(request, admin_login):
