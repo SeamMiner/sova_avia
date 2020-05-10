@@ -14,7 +14,6 @@ class Topic(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
-    min_percent_questions = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return self.title
