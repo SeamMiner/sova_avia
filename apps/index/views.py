@@ -22,7 +22,7 @@ def auth(request):
     try:
         user_instance = User.objects.get(login=request.POST['login'])
         if user_instance.password == request.POST['password']:
-            return HttpResponseRedirect(reverse('index:register'))  # Следует переписать путь до страницы с курсами
+            return HttpResponseRedirect(reverse('lk:index', args=(user_instance.login, )))
         else:
             return HttpResponseRedirect(reverse('index:index', args=(1, )))
     except:
@@ -30,6 +30,8 @@ def auth(request):
             admin_instance = Admin.objects.get(login=request.POST['login'])
             if admin_instance.password == request.POST['password']:
                 return HttpResponseRedirect(reverse('admin_panel:index', args=(admin_instance.login, )))
+            else:
+                return HttpResponseRedirect(reverse('index:index', args=(1,)))
         except:
             return HttpResponseRedirect(reverse('index:index', args=(1, )))
 
